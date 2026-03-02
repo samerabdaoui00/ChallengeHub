@@ -2,19 +2,19 @@
 
 class Database {
 
-    private $host = "localhost";
-    private $db = "web";
-    private $user = "root";
-    private $pass = "";
+    private static $host = "localhost";
+    private static $dbname = "web";
+    private static $username = "root";
+    private static $password = "";
 
-    public function connect(){
+    public static function connect(){
 
         try{
 
             $pdo = new PDO(
-                "mysql:host=$this->host;dbname=$this->db",
-                $this->user,
-                $this->pass
+                "mysql:host=" . self::$host . ";dbname=" . self::$dbname,
+                self::$username,
+                self::$password
             );
 
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -23,10 +23,9 @@ class Database {
 
         }catch(PDOException $e){
 
-            die("Database error : " . $e->getMessage());
+            die("Database connection error: " . $e->getMessage());
 
         }
 
     }
-
 }

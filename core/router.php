@@ -1,21 +1,31 @@
 <?php
-
 class Router {
 
-    public function route(){
+    public function route() {
+        $page = $_GET['page'] ?? 'challenges';
 
-        $url = $_GET['url'] ?? 'challenge/index';
+        switch($page){
+            case 'challenges':
+                require_once '../controllers/ChallengeController.php';
+                $controller = new ChallengeController();
+                $controller->index();
+                break;
 
-        $parts = explode('/', $url);
+            case 'create_challenge':
+                require_once '../controllers/ChallengeController.php';
+                $controller = new ChallengeController();
+                $controller->create();
+                break;
 
-        $controllerName = ucfirst($parts[0]).'Controller';
-        $method = $parts[1] ?? 'index';
+            case 'store_challenge':
+                require_once '../controllers/ChallengeController.php';
+                $controller = new ChallengeController();
+                $controller->store();
+                break;
 
-        require_once "../controllers/".$controllerName.".php";
-
-        $controller = new $controllerName();
-
-        $controller->$method();
+            default:
+                echo "<h2>Page not found</h2>";
+                break;
+        }
     }
-
 }

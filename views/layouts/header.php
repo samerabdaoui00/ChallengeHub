@@ -17,3 +17,7 @@
 </header>
 
 <div class="container">
+    <a href="index.php?page=create_challenge"
+   style="background:#ff8fab;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;margin-right:10px;">
+   Create Challenge
+</a>

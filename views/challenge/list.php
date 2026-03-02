@@ -1,33 +1,35 @@
-<h2>All Challenges</h2>
+<h2>Challenges</h2>
 
-<a href="/challengehub/public/index.php?url=challenge/create" class="btn">
-Create New Challenge
-</a>
+<?php
+if(isset($challenges) && !empty($challenges)){
+    
+    foreach($challenges as $challenge){
+?>
 
-<?php foreach($challenges as $challenge): ?>
+<div style="border:1px solid #ccc; padding:15px; margin-bottom:15px; border-radius:8px;">
 
-<div class="card">
+    <h3>
+        <?php echo htmlspecialchars($challenge['title'] ?? 'Untitled Challenge'); ?>
+    </h3>
 
-<h3><?php echo $challenge['title']; ?></h3>
+    <p>
+        <?php echo htmlspecialchars($challenge['description'] ?? 'No description'); ?>
+    </p>
 
-<p><?php echo $challenge['description']; ?></p>
+    <br>
 
-<p>Votes: <?php echo $challenge['votes']; ?></p>
-
-<form method="POST" action="/challengehub/public/index.php?url=challenge/vote">
-    <input type="hidden" name="challenge_id" value="<?= $challenge['id'] ?>">
-    <button class="vote-btn">🌸 Vote</button>
-</form>
-
-</div>
-<a href="/challengehub/public/index.php?url=challenge/edit&id=<?= $challenge['id'] ?>" class="btn">✏️ Edit</a>
-
-<!-- Delete button -->
-<form method="POST" action="/challengehub/public/index.php?url=challenge/destroy" style="display:inline-block;">
-    <input type="hidden" name="id" value="<?= $challenge['id'] ?>">
-    <button class="btn btn-danger" onclick="return confirm('Are you sure?')">🗑 Delete</button>
-</form>
+    <!-- Button to submit work -->
+    <a href="index.php?page=submissions&challenge_id=<?php echo $challenge['id']; ?>"
+       style="background:#ff8fab;color:white;padding:10px 14px;border-radius:6px;text-decoration:none;margin-right:10px;">
+       Submit your work
+    </a>
 
 </div>
 
-<?php endforeach; ?>
+<?php
+    }
+
+}else{
+    echo "<p>No challenges available.</p>";
+}
+?>
