@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="register.php" method="post">
+    <form action="index.php?action=register" method="post">
 Nom d'utilisateur : <input type="text" name="name"><br><br>
 Email : <input type="text" name="email"><br><br>
 Mot de passe : <input type="password" name="password"><br><br>
@@ -14,6 +14,6 @@ Mot de passe : <input type="password" name="password"><br><br>
 
 </form>
 <br>
-<a href="connect.html">connection</a>
+<a href="index.php?action=login">connection</a>
 </body>
 </html>
