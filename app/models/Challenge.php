@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__ . "/../../config/configuration.php");
-
 class Challenge {
     private ?int $id = null;
     private int $user_id;
@@ -10,7 +9,6 @@ class Challenge {
     private ?string $image;
     private string $deadline;
     private ?string $created_at = null;
-
     public function __construct(int $user_id, string $title, string $description, string $category, string $deadline, ?string $image = null, ?int $id = null) {
         $this->id = $id;
         $this->user_id = $user_id;
@@ -20,7 +18,6 @@ class Challenge {
         $this->deadline = $deadline;
         $this->image = $image;
     }
-
     public function getId(): ?int { return $this->id; }
     public function getUserId(): int { return $this->user_id; }
     public function getTitle(): string { return $this->title; }
@@ -29,12 +26,10 @@ class Challenge {
     public function getImage(): ?string { return $this->image; }
     public function getDeadline(): string { return $this->deadline; }
     public function getCreatedAt(): ?string { return $this->created_at; }
-
     public function create(): bool {
         $connexion = connect_bd();
         $sql = "INSERT INTO challenges (user_id, title, description, category, image, deadline) 
                 VALUES (:user_id, :title, :description, :category, :image, :deadline)";
-        
         $stmt = $connexion->prepare($sql);
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':title', $this->title);
@@ -42,20 +37,17 @@ class Challenge {
         $stmt->bindParam(':category', $this->category);
         $stmt->bindParam(':image', $this->image);
         $stmt->bindParam(':deadline', $this->deadline);
-
         if ($stmt->execute()) {
             $this->id = $connexion->lastInsertId();
             return true;
         }
         return false;
     }
-
     public function update(array $data): bool {
         $connexion = connect_bd();
         $sql = "UPDATE challenges SET title = :title, description = :description, 
                 category = :category, image = :image, deadline = :deadline 
                 WHERE id = :id";
-        
         $stmt = $connexion->prepare($sql);
         $stmt->bindParam(':title', $data['title']);
         $stmt->bindParam(':description', $data['description']);
@@ -63,10 +55,8 @@ class Challenge {
         $stmt->bindParam(':image', $data['image']);
         $stmt->bindParam(':deadline', $data['deadline']);
         $stmt->bindParam(':id', $this->id);
-
         return $stmt->execute();
     }
-
     public function delete(): bool {
         $connexion = connect_bd();
         $sql = "DELETE FROM challenges WHERE id = :id";
@@ -74,14 +64,12 @@ class Challenge {
         $stmt->bindParam(':id', $this->id);
         return $stmt->execute();
     }
-
     public static function getById(int $id): ?Challenge {
         $connexion = connect_bd();
         $sql = "SELECT * FROM challenges WHERE id = :id";
         $stmt = $connexion->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
             $challenge = new Challenge(
@@ -98,12 +86,10 @@ class Challenge {
         }
         return null;
     }
-
     public static function getAll(): array {
         $connexion = connect_bd();
         $sql = "SELECT * FROM challenges ORDER BY created_at DESC";
         $stmt = $connexion->query($sql);
-        
         $challenges = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $challenge = new Challenge(
@@ -120,14 +106,12 @@ class Challenge {
         }
         return $challenges;
     }
-
     public static function getByUser(int $user_id): array {
         $connexion = connect_bd();
         $sql = "SELECT * FROM challenges WHERE user_id = :user_id ORDER BY created_at DESC";
         $stmt = $connexion->prepare($sql);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
-
         $challenges = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $challenge = new Challenge(

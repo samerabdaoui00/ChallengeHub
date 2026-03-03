@@ -1,3 +1,4 @@
+<?php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,6 @@ Nom d'utilisateur : <input type="text" name="name"><br><br>
 Email : <input type="text" name="email"><br><br>
 Mot de passe : <input type="password" name="password"><br><br>
 <input type="submit" value="S'inscrire">
-
 </form>
 <br>
 <a href="index.php?action=login">connection</a>
