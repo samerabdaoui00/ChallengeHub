@@ -1,18 +1,26 @@
 <?php
+
+require_once __DIR__."/../config/database.php";
+
 class Vote {
-    private int $id;
-    private int $submission_id;
-    private int $user_id;
-    private int $value;
-    private DateTime $created_at;
 
-    public function create(): bool {
+    private $conn;
+
+    public function __construct(){
+
+        $db = new Database();
+        $this->conn = $db->connect();
+
     }
 
-    public static function getBySubmission(int $submission_id): array {
+    public function vote($submission_id){
+
+        $sql = "INSERT INTO votes(submission_id,user_id)
+                VALUES(?,1)";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$submission_id]);
+
     }
 
-    public static function getByUser(int $user_id): array {
-    }
 }
-?>

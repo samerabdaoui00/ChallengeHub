@@ -1,17 +1,22 @@
 <?php
-
 class Controller {
 
-    protected function view($path,$data = []){
-
+    protected function view($path, $data = []) {
         extract($data);
 
-        require __DIR__."/../views/layouts/header.php";
-
-        require __DIR__."/../views/".$path.".php";
-
-        require __DIR__."/../views/layouts/footer.php";
-
+        $viewFile = __DIR__ . "/../app/views/" . $path . ".php";
+        
+        if (file_exists($viewFile)) {
+            require_once __DIR__ . "/../app/views/layouts/header.php";
+            require_once $viewFile;
+            require_once __DIR__ . "/../app/views/layouts/footer.php";
+        } else {
+            die("View $path not found at $viewFile");
+        }
     }
 
+    protected function redirect($action) {
+        header("Location: index.php?action=" . $action);
+        exit();
+    }
 }

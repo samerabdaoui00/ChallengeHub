@@ -1,30 +1,22 @@
 <?php
+require_once __DIR__ . '/../../core/Database.php';
+
 class Challenge {
-    private int $id;
-    private int $user_id;
-    private string $title;
-    private string $description;
-    private string $category;
-    private ?string $image;
-    private DateTime $deadline;
-    private DateTime $created_at;
+    private $db;
 
-    public function create(): bool {
+    public function __construct() {
+        $this->db = Database::connect();
     }
 
-    public function update(array $data): bool {
+    public function getAll() {
+        $sql = "SELECT * FROM challenges ORDER BY id DESC";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
     }
 
-    public function delete(): bool {
-    }
-
-    public static function getById(int $id): ?Challenge {
-    }
-
-    public static function getAll(): array {
-    }
-
-    public static function getByUser(int $user_id): array {
+    public function create($title, $description, $category) {
+        $sql = "INSERT INTO challenges(title, description, category) VALUES (?, ?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$title, $description, $category]);
     }
 }
-?>
