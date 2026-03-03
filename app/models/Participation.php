@@ -17,7 +17,7 @@ class Participation {
         $this->image = $image;
     }
 
-    // Getters
+
     public function getId(): ?int { return $this->id; }
     public function getChallengeId(): int { return $this->challenge_id; }
     public function getUserId(): int { return $this->user_id; }

@@ -8,7 +8,7 @@ class Challenge {
     private string $description;
     private string $category;
     private ?string $image;
-    private string $deadline; // Stored as string to match DB date format
+    private string $deadline;
     private ?string $created_at = null;
 
     public function __construct(int $user_id, string $title, string $description, string $category, string $deadline, ?string $image = null, ?int $id = null) {
@@ -21,7 +21,6 @@ class Challenge {
         $this->image = $image;
     }
 
-    // Getters
     public function getId(): ?int { return $this->id; }
     public function getUserId(): int { return $this->user_id; }
     public function getTitle(): string { return $this->title; }
