@@ -112,5 +112,33 @@ class Participation {
         }
         return $participations;
     }
+    public static function getRanking(int $limit = 10): array {
+        $connexion = connect_bd();
+        $sql = "SELECT s.*, COUNT(v.id) as vote_count 
+                FROM submissions s 
+                LEFT JOIN votes v ON s.id = v.submission_id 
+                GROUP BY s.id 
+                ORDER BY vote_count DESC 
+                LIMIT :limit";
+        $stmt = $connexion->prepare($sql);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $participation = new Participation(
+                $data['challenge_id'],
+                $data['user_id'],
+                $data['description'],
+                $data['image'],
+                $data['id']
+            );
+            $participation->created_at = $data['created_at'];
+            $results[] = [
+                'participation' => $participation,
+                'vote_count' => $data['vote_count']
+            ];
+        }
+        return $results;
+    }
 }
 ?>

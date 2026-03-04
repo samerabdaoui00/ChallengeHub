@@ -31,6 +31,7 @@ switch ($action) {
         break;
     case 'profile':
         require_once(__DIR__ . "/app/controllers/ProfileController.php");
+        (new ProfileController())->index();
         break;
     case 'list_challenges':
         require_once(__DIR__ . "/app/controllers/ChallengeController.php");
@@ -75,6 +76,10 @@ switch ($action) {
     case 'vote_submission':
         require_once(__DIR__ . "/app/controllers/VoteController.php");
         (new VoteController())->vote();
+        break;
+    case 'ranking':
+        require_once(__DIR__ . "/app/controllers/RankingController.php");
+        (new RankingController())->index();
         break;
     case 'logout':
         $user = new User("", "", "");

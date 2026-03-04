@@ -12,7 +12,13 @@ class ChallengeController {
         }
     }
     public function list() {
-        $challenges = Challenge::getAll();
+        $keyword = $_GET['q'] ?? '';
+        $category = $_GET['cat'] ?? '';
+        if (!empty($keyword) || !empty($category)) {
+            $challenges = Challenge::search($keyword, $category);
+        } else {
+            $challenges = Challenge::getAll();
+        }
         require_once(__DIR__ . "/../views/challenge/list.php");
     }
     public function create() {

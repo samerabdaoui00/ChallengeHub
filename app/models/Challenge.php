@@ -128,5 +128,39 @@ class Challenge {
         }
         return $challenges;
     }
+    public static function search(string $keyword = '', string $category = ''): array {
+        $connexion = connect_bd();
+        $sql = "SELECT * FROM challenges WHERE 1=1";
+        $params = [];
+        if (!empty($keyword)) {
+            $sql .= " AND (title LIKE :keyword OR description LIKE :keyword)";
+            $params[':keyword'] = '%' . $keyword . '%';
+        }
+        if (!empty($category)) {
+            $sql .= " AND category = :category";
+            $params[':category'] = $category;
+        }
+        $sql .= " ORDER BY created_at DESC";
+        $stmt = $connexion->prepare($sql);
+        foreach ($params as $key => &$val) {
+            $stmt->bindParam($key, $val);
+        }
+        $stmt->execute();
+        $challenges = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $challenge = new Challenge(
+                $data['user_id'],
+                $data['title'],
+                $data['description'],
+                $data['category'],
+                $data['deadline'],
+                $data['image'],
+                $data['id']
+            );
+            $challenge->created_at = $data['created_at'];
+            $challenges[] = $challenge;
+        }
+        return $challenges;
+    }
 }
 ?>
