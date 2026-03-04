@@ -52,6 +52,30 @@ switch ($action) {
         require_once(__DIR__ . "/app/controllers/ChallengeController.php");
         (new ChallengeController())->delete($_GET['id'] ?? 0);
         break;
+    case 'submit_participation':
+        require_once(__DIR__ . "/app/controllers/ParticipationController.php");
+        (new ParticipationController())->create($_GET['challenge_id'] ?? 0);
+        break;
+    case 'edit_participation':
+        require_once(__DIR__ . "/app/controllers/ParticipationController.php");
+        (new ParticipationController())->edit($_GET['id'] ?? 0);
+        break;
+    case 'delete_participation':
+        require_once(__DIR__ . "/app/controllers/ParticipationController.php");
+        (new ParticipationController())->delete($_GET['id'] ?? 0);
+        break;
+    case 'add_comment':
+        require_once(__DIR__ . "/app/controllers/CommentController.php");
+        (new CommentController())->create();
+        break;
+    case 'delete_comment':
+        require_once(__DIR__ . "/app/controllers/CommentController.php");
+        (new CommentController())->delete($_GET['id'] ?? 0);
+        break;
+    case 'vote_submission':
+        require_once(__DIR__ . "/app/controllers/VoteController.php");
+        (new VoteController())->vote();
+        break;
     case 'logout':
         $user = new User("", "", "");
         $user->logout();
