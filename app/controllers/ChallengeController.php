@@ -28,7 +28,7 @@ class ChallengeController {
                 $_SESSION['user_id'],
                 $_POST['title'],
                 $_POST['description'],
-                $_POST['category'],
+                $_POST['cat'],
                 $_POST['deadline'],
                 $_POST['image'] ?? null
             );
@@ -63,7 +63,7 @@ class ChallengeController {
             $data = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'category' => $_POST['category'],
+                'category' => $_POST['cat'],
                 'deadline' => $_POST['deadline'],
                 'image' => $_POST['image'] ?? $challenge->getImage()
             ];

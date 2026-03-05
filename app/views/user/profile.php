@@ -1,104 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Profil - ChallengeHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="public/css/style.css">
     <style>
-        .container { max-width: 1000px; margin: 40px auto; display: grid; grid-template-columns: 1fr 2fr; gap: 30px; padding: 0 20px; }
-        .sidebar { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: fit-content; }
-        .main-content { display: flex; flex-direction: column; gap: 30px; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h1, h2, h3 { margin-top: 0; color: 
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9em; color: 
-        .form-group input { width: 100%; padding: 12px; border: 1px solid 
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: opacity 0.2s; }
-        .btn-primary { background: 
-        .btn-danger { background: 
-        .btn-secondary { background: 
-        .activity-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid 
-        .activity-item:last-child { border-bottom: none; }
-        .activity-item:hover { background: 
-        .activity-info h4 { margin: 0 0 5px 0; color: 
-        .activity-info p { margin: 0; font-size: 0.85em; color: 
-        .badge { background: 
+        .ch-profile-icon {
+            font-size: 5rem;
+            color: var(--ch-charcoal);
+            opacity: 0.2;
+        }
+        .ch-stat-card {
+            border: 1px solid var(--ch-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .ch-action-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--ch-border);
+            text-decoration: none;
+            color: var(--ch-charcoal);
+            transition: background 0.2s;
+        }
+        .ch-action-item:hover {
+            background-color: var(--ch-grey-light);
+            color: var(--ch-azure);
+        }
+        .ch-action-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
-<body style="background: 
-    <nav style="background: white; padding: 15px 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.php" style="font-weight: bold; color: 
-        <div>
-            <a href="index.php?action=list_challenges" style="margin-right: 20px; text-decoration: none; color: 
-            <a href="index.php?action=ranking" style="margin-right: 20px; text-decoration: none; color: 
-            <a href="index.php?action=logout" style="color: 
+<body class="bg-white">
+    <header class="ch-header d-flex justify-content-between align-items-center">
+        <a href="index.php" class="ch-logo">ChallengeHub</a>
+        <div class="flex-grow-1 d-flex justify-content-center">
+            <input type="text" class="ch-search-bar w-100 mx-4" placeholder="Rechercher...">
         </div>
-    </nav>
-    <div class="container">
-        <div class="sidebar">
-            <h2>Mon Compte</h2>
-            <?php if(!empty($message)): ?>
-                <div style="padding: 10px; border-radius: 6px; background: 
-                    <?= $message ?>
-                </div>
-            <?php endif; ?>
-            <form method="post">
-                <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" name="name" value="<?= e($_SESSION['user_name']) ?>" required autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value="<?= e($_SESSION['user_email']) ?>" required autocomplete="email">
-                </div>
-                <div class="form-group">
-                    <label>Mot de passe actuel (requis)</label>
-                    <input type="password" name="current_password" required autocomplete="current-password">
-                </div>
-                <div class="form-group">
-                    <label>Nouveau mot de passe (optionnel)</label>
-                    <input type="password" name="password" placeholder="Laissez vide pour conserver" autocomplete="new-password">
-                </div>
-                <button type="submit" name="update" class="btn btn-primary">Mettre à jour</button>
-            </form>
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid 
-            <form method="post" onsubmit="return confirm('Attention: Cette action est irréversible. Supprimer votre compte ?');">
-                <button type="submit" name="delete" class="btn btn-danger">Supprimer le compte</button>
-            </form>
+        <div class="d-flex align-items-center">
+            <a href="index.php?action=list_challenges" class="ch-icon-btn">🧭</a>
+            <a href="index.php?action=create_challenge" class="ch-icon-btn">🔳</a>
+            <a href="index.php?action=profile" class="ch-icon-btn">👤</a>
+            <a href="index.php?action=logout" class="ch-icon-btn">🚪</a>
         </div>
-        <div class="main-content">
-            <div class="section">
-                <h3>Mes Challenges Créés (<?= count($myChallenges) ?>)</h3>
-                <?php if(empty($myChallenges)): ?>
-                    <p style="color: 
-                <?php else: ?>
-                    <?php foreach($myChallenges as $c): ?>
-                        <div class="activity-item">
-                            <div class="activity-info">
-                                <h4><?= e($c->getTitle()) ?></h4>
-                                <p>Catégorie: <?= e($c->getCategory()) ?> | Expire le: <?= e($c->getDeadline()) ?></p>
-                            </div>
-                            <a href="index.php?action=show_challenge&id=<?= $c->getId() ?>" class="badge" style="text-decoration: none;">Voir</a>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+    </header>
+
+    <main class="container py-5">
+        <div class="row g-5">
+            <div class="col-md-4">
+                <div class="ch-sidebar text-center text-md-start">
+                    <div class="ch-profile-icon mb-4">👤</div>
+                    <h2 class="fw-bold mb-1">User: <?= e($_SESSION['user_name']) ?></h2>
+                    <p class="text-muted mb-4">Membre depuis: <?= date('M Y') ?></p>
+                    
+                    <?php if(!empty($message)): ?>
+                        <div class="alert alert-info border-0 shadow-sm small mb-4"><?= $message ?></div>
+                    <?php endif; ?>
+                    
+                    <div class="bg-white border rounded-4 shadow-sm overflow-hidden mb-4">
+                        <a href="#" class="ch-action-item">
+                            <span class="me-3">👤</span> Modifier le Profil
+                        </a>
+                        <a href="#" class="ch-action-item">
+                            <span class="me-3">🔑</span> Changer le Mot de Passe
+                        </a>
+                        <a href="#" class="ch-action-item">
+                            <span class="me-3">📁</span> Gérer mes Participations
+                        </a>
+                    </div>
+
+                    <form method="post" onsubmit="return confirm('Attention: Cette action est irréversible. Supprimer votre compte ?');">
+                        <button type="submit" name="delete" class="btn btn-link text-danger text-decoration-none small p-0 fw-bold">Supprimer le compte</button>
+                    </form>
+                </div>
             </div>
-            <div class="section">
-                <h3>Mes Participations (<?= count($myParticipations) ?>)</h3>
-                <?php if(empty($myParticipations)): ?>
-                    <p style="color: 
-                <?php else: ?>
-                    <?php foreach($myParticipations as $p): ?>
-                        <div class="activity-item">
-                            <div class="activity-info">
-                                <h4>Contribution 
-                                <p><?= e(mb_strimwidth($p->getDescription(), 0, 80, "...")) ?></p>
-                            </div>
-                            <a href="index.php?action=show_challenge&id=<?= $p->getChallengeId() ?>" class="badge" style="text-decoration: none;">Voir le Challenge</a>
+
+            <div class="col-md-8">
+                <div class="row g-4 mb-5">
+                    <div class="col-6 col-md-6">
+                        <div class="ch-stat-card bg-white shadow-sm">
+                            <div class="display-6 fw-bold text-charcoal"><?= count($myChallenges) ?></div>
+                            <div class="text-muted small fw-bold text-uppercase">Défis Créés</div>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                    </div>
+                    <div class="col-6 col-md-6">
+                        <div class="ch-stat-card bg-white shadow-sm">
+                            <div class="display-6 fw-bold text-charcoal"><?= count($myParticipations) ?></div>
+                            <div class="text-muted small fw-bold text-uppercase">Participations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h3 class="fw-bold mb-4">Paramètres du Profil</h3>
+                    <div class="p-4 bg-white border rounded-4 shadow-sm">
+                        <form method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold">Nom complet</label>
+                                    <input type="text" name="name" class="form-control ch-form-control" value="<?= e($_SESSION['user_name']) ?>" required autocomplete="name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold">Email</label>
+                                    <input type="email" name="email" class="form-control ch-form-control" value="<?= e($_SESSION['user_email']) ?>" required autocomplete="email">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold">Mot de passe actuel (requis)</label>
+                                    <input type="password" name="current_password" class="form-control ch-form-control" required autocomplete="current-password">
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label small fw-bold">Nouveau mot de passe (optionnel)</label>
+                                    <input type="password" name="password" class="form-control ch-form-control" placeholder="Laissez vide pour conserver" autocomplete="new-password">
+                                </div>
+                            </div>
+                            <button type="submit" name="update" class="btn ch-btn-charcoal px-5">Mettre à jour</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h3 class="fw-bold mb-4">Mes Dernières Activités</h3>
+                    <div class="bg-white border rounded-4 shadow-sm overflow-hidden">
+                        <?php if(empty($myChallenges) && empty($myParticipations)): ?>
+                            <div class="p-4 text-center text-muted">Aucune activité récente.</div>
+                        <?php endif; ?>
+                        
+                        <?php foreach($myChallenges as $c): ?>
+                            <div class="d-flex align-items-center p-3 border-bottom">
+                                <div class="bg-light rounded px-3 py-2 me-3">🏆</div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 fw-bold"><?= e($c->getTitle()) ?></h6>
+                                    <p class="mb-0 text-muted small">Challenge créé le <?= e($c->getDeadline()) ?></p>
+                                </div>
+                                <a href="index.php?action=show_challenge&id=<?= $c->getId() ?>" class="btn btn-outline-dark btn-sm rounded-pill px-3">Voir</a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

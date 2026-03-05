@@ -1,3 +1,102 @@
+:root {
+    --ch-charcoal: #333333;
+    --ch-grey-light: #f8f9fa;
+    --ch-azure: #007bff;
+    --ch-white: #ffffff;
+    --ch-border: #e0e0e0;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    background-color: var(--ch-white);
+    color: var(--ch-charcoal);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.ch-header {
+    background-color: var(--ch-grey-light);
+    border-bottom: 1px solid var(--ch-border);
+    padding: 0.75rem 2rem;
+}
+
+.ch-logo {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--ch-charcoal);
+    text-decoration: none;
+}
+
+.ch-search-bar {
+    max-width: 400px;
+    background-color: #ffffff;
+    border: 1px solid var(--ch-border);
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+}
+
+.ch-icon-btn {
+    color: var(--ch-charcoal);
+    font-size: 1.25rem;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.ch-icon-btn:hover {
+    color: var(--ch-azure);
+}
+
+.ch-btn-charcoal {
+    background-color: var(--ch-charcoal);
+    color: white;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    transition: opacity 0.2s;
+}
+
+.ch-btn-charcoal:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.ch-card {
+    border: 1px solid var(--ch-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.ch-badge-azure {
+    background-color: transparent;
+    color: var(--ch-azure);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.ch-sidebar {
+    border-right: 1px solid var(--ch-border);
+    padding-right: 2rem;
+}
+
+.ch-form-control {
+    border: 1px solid var(--ch-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.ch-form-control:focus {
+    border-color: var(--ch-azure);
+    box-shadow: none;
 }

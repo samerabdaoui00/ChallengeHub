@@ -12,4 +12,3 @@ class RankingController {
         require_once(__DIR__ . "/../views/ranking/index.php");
     }
 }
-?>
