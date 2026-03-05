@@ -1,4 +1,3 @@
-<?php
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,19 +44,19 @@
             <form method="post">
                 <div class="form-group">
                     <label>Nom complet</label>
-                    <input type="text" name="name" value="<?= e($_SESSION['user_name']) ?>" required>
+                    <input type="text" name="name" value="<?= e($_SESSION['user_name']) ?>" required autocomplete="name">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" value="<?= e($_SESSION['user_email']) ?>" required>
+                    <input type="email" name="email" value="<?= e($_SESSION['user_email']) ?>" required autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label>Mot de passe actuel (requis)</label>
-                    <input type="password" name="current_password" required>
+                    <input type="password" name="current_password" required autocomplete="current-password">
                 </div>
                 <div class="form-group">
                     <label>Nouveau mot de passe (optionnel)</label>
-                    <input type="password" name="password" placeholder="Laissez vide pour conserver">
+                    <input type="password" name="password" placeholder="Laissez vide pour conserver" autocomplete="new-password">
                 </div>
                 <button type="submit" name="update" class="btn btn-primary">Mettre à jour</button>
             </form>

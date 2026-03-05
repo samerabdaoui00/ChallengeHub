@@ -1,4 +1,3 @@
-<?php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +7,9 @@
 </head>
 <body>
     <form action="index.php?action=register" method="post">
-Nom d'utilisateur : <input type="text" name="name"><br><br>
-Email : <input type="text" name="email"><br><br>
-Mot de passe : <input type="password" name="password"><br><br>
+Nom d'utilisateur : <input type="text" name="name" autocomplete="username"><br><br>
+Email : <input type="text" name="email" autocomplete="email"><br><br>
+Mot de passe : <input type="password" name="password" autocomplete="new-password"><br><br>
 <input type="submit" value="S'inscrire">
 </form>
 <br>

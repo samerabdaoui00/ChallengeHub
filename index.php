@@ -1,4 +1,7 @@
 <?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once(__DIR__ . "/config/configuration.php");
 require_once(__DIR__ . "/app/models/User.php");
 $action = isset($_GET['action']) ? $_GET['action'] : 'login';

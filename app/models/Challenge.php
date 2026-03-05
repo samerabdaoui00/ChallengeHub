@@ -9,7 +9,7 @@ class Challenge {
     private ?string $image;
     private string $deadline;
     private ?string $created_at = null;
-    public function __construct(int $user_id, string $title, string $description, string $category, string $deadline, ?string $image = null, ?int $id = null) {
+    public function __construct(int $user_id = 0, string $title = "", string $description = "", string $category = "", string $deadline = "", ?string $image = null, ?int $id = null) {
         $this->id = $id;
         $this->user_id = $user_id;
         $this->title = $title;
@@ -17,6 +17,13 @@ class Challenge {
         $this->category = $category;
         $this->deadline = $deadline;
         $this->image = $image;
+    }
+    public function hydrate(array $data): void {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
     public function getId(): ?int { return $this->id; }
     public function getUserId(): int { return $this->user_id; }
@@ -72,16 +79,8 @@ class Challenge {
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
-            $challenge = new Challenge(
-                $data['user_id'],
-                $data['title'],
-                $data['description'],
-                $data['category'],
-                $data['deadline'],
-                $data['image'],
-                $data['id']
-            );
-            $challenge->created_at = $data['created_at'];
+            $challenge = new Challenge();
+            $challenge->hydrate($data);
             return $challenge;
         }
         return null;
@@ -92,16 +91,8 @@ class Challenge {
         $stmt = $connexion->query($sql);
         $challenges = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $challenge = new Challenge(
-                $data['user_id'],
-                $data['title'],
-                $data['description'],
-                $data['category'],
-                $data['deadline'],
-                $data['image'],
-                $data['id']
-            );
-            $challenge->created_at = $data['created_at'];
+            $challenge = new Challenge();
+            $challenge->hydrate($data);
             $challenges[] = $challenge;
         }
         return $challenges;
@@ -114,16 +105,8 @@ class Challenge {
         $stmt->execute();
         $challenges = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $challenge = new Challenge(
-                $data['user_id'],
-                $data['title'],
-                $data['description'],
-                $data['category'],
-                $data['deadline'],
-                $data['image'],
-                $data['id']
-            );
-            $challenge->created_at = $data['created_at'];
+            $challenge = new Challenge();
+            $challenge->hydrate($data);
             $challenges[] = $challenge;
         }
         return $challenges;
@@ -148,19 +131,10 @@ class Challenge {
         $stmt->execute();
         $challenges = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $challenge = new Challenge(
-                $data['user_id'],
-                $data['title'],
-                $data['description'],
-                $data['category'],
-                $data['deadline'],
-                $data['image'],
-                $data['id']
-            );
-            $challenge->created_at = $data['created_at'];
+            $challenge = new Challenge();
+            $challenge->hydrate($data);
             $challenges[] = $challenge;
         }
         return $challenges;
     }
 }
-?>

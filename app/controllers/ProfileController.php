@@ -4,9 +4,6 @@ require_once(__DIR__ . "/../models/Challenge.php");
 require_once(__DIR__ . "/../models/Participation.php");
 class ProfileController {
     private function checkLogin() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?action=login");
             exit();
@@ -38,4 +35,3 @@ class ProfileController {
         require_once(__DIR__ . "/../views/user/profile.php");
     }
 }
-?>

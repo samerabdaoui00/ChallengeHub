@@ -2,14 +2,24 @@
 require_once(__DIR__ . "/../../config/configuration.php");
 class User
 {
+    private ?int $id = null;
     private string $name;
     private string $email;
-    private string $password; 
-    public function __construct($name,$email,$password)
+    private string $password;
+    private ?string $created_at = null;
+    public function __construct(string $name = "", string $email = "", string $password = "")
     {
         $this->name = $name;
         $this->email = $email;
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : "";
+    }
+    public function hydrate(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
     public function register(): bool 
     {
@@ -30,12 +40,12 @@ class User
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         if ($stmt->rowCount() == 1) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($password, $user['password'])) {
-                session_start();
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_email'] = $user['email'];
+            $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($password, $user_data['password'])) {
+                $this->hydrate($user_data);
+                $_SESSION['user_id'] = $this->id;
+                $_SESSION['user_name'] = $this->name;
+                $_SESSION['user_email'] = $this->email;
                 return true;
             }
         }
@@ -43,7 +53,6 @@ class User
     }
     public function logout(): void
     {
-        session_start();
         session_unset();
         session_destroy();
         header("Location: index.php?action=login");
@@ -75,17 +84,16 @@ class User
         }
         return $stmt->execute();
     }
-        public function delete(): bool
-        {
-            $connexion = connect_bd();
-            $sql = "DELETE FROM users WHERE id = :id";
-            $stmt = $connexion->prepare($sql);
-            $stmt->bindParam(':id', $_SESSION['user_id']);
-            if($stmt->execute()){
-                $this->logout();
-                return true;
-            }
-            return false;
+    public function delete(): bool
+    {
+        $connexion = connect_bd();
+        $sql = "DELETE FROM users WHERE id = :id";
+        $stmt = $connexion->prepare($sql);
+        $stmt->bindParam(':id', $_SESSION['user_id']);
+        if($stmt->execute()){
+            $this->logout();
+            return true;
         }
+        return false;
+    }
 }
-?>

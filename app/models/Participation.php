@@ -7,12 +7,19 @@ class Participation {
     private ?string $description;
     private ?string $image;
     private ?string $created_at = null;
-    public function __construct(int $challenge_id, int $user_id, ?string $description = null, ?string $image = null, ?int $id = null) {
+    public function __construct(int $challenge_id = 0, int $user_id = 0, ?string $description = null, ?string $image = null, ?int $id = null) {
         $this->id = $id;
         $this->challenge_id = $challenge_id;
         $this->user_id = $user_id;
         $this->description = $description;
         $this->image = $image;
+    }
+    public function hydrate(array $data): void {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
     public function getId(): ?int { return $this->id; }
     public function getChallengeId(): int { return $this->challenge_id; }
@@ -60,14 +67,8 @@ class Participation {
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
-            $participation = new Participation(
-                $data['challenge_id'],
-                $data['user_id'],
-                $data['description'],
-                $data['image'],
-                $data['id']
-            );
-            $participation->created_at = $data['created_at'];
+            $participation = new Participation();
+            $participation->hydrate($data);
             return $participation;
         }
         return null;
@@ -80,14 +81,8 @@ class Participation {
         $stmt->execute();
         $participations = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $participation = new Participation(
-                $data['challenge_id'],
-                $data['user_id'],
-                $data['description'],
-                $data['image'],
-                $data['id']
-            );
-            $participation->created_at = $data['created_at'];
+            $participation = new Participation();
+            $participation->hydrate($data);
             $participations[] = $participation;
         }
         return $participations;
@@ -100,14 +95,8 @@ class Participation {
         $stmt->execute();
         $participations = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $participation = new Participation(
-                $data['challenge_id'],
-                $data['user_id'],
-                $data['description'],
-                $data['image'],
-                $data['id']
-            );
-            $participation->created_at = $data['created_at'];
+            $participation = new Participation();
+            $participation->hydrate($data);
             $participations[] = $participation;
         }
         return $participations;
@@ -125,14 +114,8 @@ class Participation {
         $stmt->execute();
         $results = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $participation = new Participation(
-                $data['challenge_id'],
-                $data['user_id'],
-                $data['description'],
-                $data['image'],
-                $data['id']
-            );
-            $participation->created_at = $data['created_at'];
+            $participation = new Participation();
+            $participation->hydrate($data);
             $results[] = [
                 'participation' => $participation,
                 'vote_count' => $data['vote_count']
@@ -141,4 +124,3 @@ class Participation {
         return $results;
     }
 }
-?>
