@@ -14,7 +14,7 @@ class ProfileController {
     }
     public function index() {
         $this->checkLogin();
-        $user = new User($_SESSION['user_name'], $_SESSION['user_email'], "");
+        $user = new User($_SESSION['user_name'], $_SESSION['user_email'], $_SESSION['user_id']);
         $message = "";
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['update'])) {

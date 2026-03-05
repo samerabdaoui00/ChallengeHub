@@ -12,6 +12,7 @@ class ChallengeController {
         }
     }
     public function list() {
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         $keyword = $_GET['q'] ?? '';
         $category = $_GET['cat'] ?? '';
         if (!empty($keyword) || !empty($category)) {
@@ -44,6 +45,7 @@ class ChallengeController {
         }
     }
     public function show($id) {
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         $challenge = Challenge::getById($id);
         if (!$challenge) {
             header("Location: index.php?action=list_challenges");

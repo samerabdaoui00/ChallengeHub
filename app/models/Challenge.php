@@ -7,9 +7,9 @@ class Challenge {
     private string $description;
     private string $category;
     private ?string $image;
-    private string $deadline;
+    private ?string $deadline;
     private ?string $created_at = null;
-    public function __construct(int $user_id, string $title, string $description, string $category, string $deadline, ?string $image = null, ?int $id = null) {
+    public function __construct(int $user_id, string $title, string $description, string $category, ?string $deadline, ?string $image = null, ?int $id = null) {
         $this->id = $id;
         $this->user_id = $user_id;
         $this->title = $title;
@@ -24,7 +24,7 @@ class Challenge {
     public function getDescription(): string { return $this->description; }
     public function getCategory(): string { return $this->category; }
     public function getImage(): ?string { return $this->image; }
-    public function getDeadline(): string { return $this->deadline; }
+    public function getDeadline(): ?string { return $this->deadline; }
     public function getCreatedAt(): ?string { return $this->created_at; }
     public function create(): bool {
         $connexion = connect_bd();

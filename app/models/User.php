@@ -5,11 +5,16 @@ class User
     private string $name;
     private string $email;
     private string $password; 
-    public function __construct($name,$email,$password)
+    public function __construct($name, $email, $password)
     {
         $this->name = $name;
         $this->email = $email;
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
+        // Only hash if it looks like a real password (string, not numeric ID)
+        if (!empty($password) && !is_numeric($password)) {
+            $this->password = password_hash($password, PASSWORD_DEFAULT);
+        } else {
+            $this->password = '';
+        }
     }
     public function register(): bool 
     {
@@ -20,7 +25,14 @@ class User
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
-        return $stmt->execute();
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
+                throw new Exception("Cet email est déjà utilisé. Veuillez en choisir un autre.");
+            }
+            throw $e;
+        }
     }
     public function login(string $email, string $password): bool
     {
@@ -32,7 +44,7 @@ class User
         if ($stmt->rowCount() == 1) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if (password_verify($password, $user['password'])) {
-                session_start();
+                if (session_status() === PHP_SESSION_NONE) { session_start(); }
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
@@ -43,7 +55,7 @@ class User
     }
     public function logout(): void
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         session_unset();
         session_destroy();
         header("Location: index.php?action=login");
@@ -75,17 +87,17 @@ class User
         }
         return $stmt->execute();
     }
-        public function delete(): bool
-        {
-            $connexion = connect_bd();
-            $sql = "DELETE FROM users WHERE id = :id";
-            $stmt = $connexion->prepare($sql);
-            $stmt->bindParam(':id', $_SESSION['user_id']);
-            if($stmt->execute()){
-                $this->logout();
-                return true;
-            }
-            return false;
+    public function delete(): bool
+    {
+        $connexion = connect_bd();
+        $sql = "DELETE FROM users WHERE id = :id";
+        $stmt = $connexion->prepare($sql);
+        $stmt->bindParam(':id', $_SESSION['user_id']);
+        if($stmt->execute()){
+            $this->logout();
+            return true;
         }
+        return false;
+    }
 }
 ?>

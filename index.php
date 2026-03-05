@@ -1,15 +1,22 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once(__DIR__ . "/config/configuration.php");
 require_once(__DIR__ . "/app/models/User.php");
-$action = isset($_GET['action']) ? $_GET['action'] : 'login';
+$action = isset($_GET['action']) ? $_GET['action'] : 'list_challenges';
 switch ($action) {
     case 'register':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = new User($_POST['name'], $_POST['email'], $_POST['password']);
-            if ($user->register()) {
-                header("Location: index.php?action=login&success=1");
-            } else {
-                $error = "Erreur d'inscription.";
+            try {
+                $user = new User($_POST['name'], $_POST['email'], $_POST['password']);
+                if ($user->register()) {
+                    header("Location: index.php?action=login&success=1");
+                    exit();
+                } else {
+                    $error = "Erreur d'inscription. Veuillez réessayer.";
+                    require_once(__DIR__ . "/app/views/auth/register.php");
+                }
+            } catch (Exception $e) {
+                $error = $e->getMessage();
                 require_once(__DIR__ . "/app/views/auth/register.php");
             }
         } else {
@@ -21,6 +28,7 @@ switch ($action) {
             $user = new User("", "", "");
             if ($user->login($_POST['email'], $_POST['password'])) {
                 header("Location: index.php?action=profile");
+                exit();
             } else {
                 $error = "Identifiants incorrects.";
                 require_once(__DIR__ . "/app/views/auth/login.php");
