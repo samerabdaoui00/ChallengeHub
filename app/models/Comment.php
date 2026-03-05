@@ -1,15 +1,23 @@
 <?php
+require_once(__DIR__ . "/../../config/configuration.php");
 class Comment {
     private ?int $id = null;
     private int $submission_id;
     private int $user_id;
     private string $content;
     private ?string $created_at = null;
-    public function __construct(int $submission_id, int $user_id, string $content, ?int $id = null) {
+    public function __construct(int $submission_id = 0, int $user_id = 0, string $content = "", ?int $id = null) {
         $this->id = $id;
         $this->submission_id = $submission_id;
         $this->user_id = $user_id;
         $this->content = $content;
+    }
+    public function hydrate(array $data): void {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
     public function getId(): ?int { return $this->id; }
     public function getSubmissionId(): int { return $this->submission_id; }
@@ -44,8 +52,8 @@ class Comment {
         $stmt->execute();
         $comments = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $comment = new Comment($data['submission_id'], $data['user_id'], $data['content'], $data['id']);
-            $comment->created_at = $data['created_at'];
+            $comment = new Comment();
+            $comment->hydrate($data);
             $comments[] = $comment;
         }
         return $comments;
@@ -57,11 +65,10 @@ class Comment {
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         if ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $comment = new Comment($data['submission_id'], $data['user_id'], $data['content'], $data['id']);
-            $comment->created_at = $data['created_at'];
+            $comment = new Comment();
+            $comment->hydrate($data);
             return $comment;
         }
         return null;
     }
 }
-?>

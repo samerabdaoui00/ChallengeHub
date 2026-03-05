@@ -5,10 +5,17 @@ class Vote {
     private int $submission_id;
     private int $user_id;
     private ?string $created_at = null;
-    public function __construct(int $submission_id, int $user_id, ?int $id = null) {
+    public function __construct(int $submission_id = 0, int $user_id = 0, ?int $id = null) {
         $this->id = $id;
         $this->submission_id = $submission_id;
         $this->user_id = $user_id;
+    }
+    public function hydrate(array $data): void {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
     public function getId(): ?int { return $this->id; }
     public function getSubmissionId(): int { return $this->submission_id; }
@@ -56,4 +63,3 @@ class Vote {
         return $stmt->fetch() !== false;
     }
 }
-?>
